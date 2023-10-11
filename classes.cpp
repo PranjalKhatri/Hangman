@@ -1,7 +1,7 @@
 #include "classes.h"
 
 bool check(char c, string g) {
-
+    //returns true if the given character c is present in given string
     for (int i = 0; i < g.size(); i++)
     {
         if (c == g[i]) {
@@ -12,33 +12,42 @@ bool check(char c, string g) {
     return false;
 }
 
-void fill_char(char a, string s, string& wc) {
-    int arr[7] = { 0,0,0,0,0,0,0 };
+/// @brief fills the given string wc with the given letter at every position it appears in s
+/// @param a the letter to check and fill
+/// @param s the string s to check from
+/// @param wc the string to fill into
+void fill_char(char a, string s, string& cw) {
+    vector<int> arr;
     int size = 0;
-    for (int i = 0; i < 7; i++)
+    for (int i = 0; i <s.length(); i++)
     {
         if (s[i] == a) {
-            arr[size] = i;
-            size++;
+            cw[i] = a;
         }
     }
 
-    for (int i = 0; i < size; i++)
-    {
-        wc[arr[i]] = a;
-    }
+    // for (int i = 0; i < size; i++)
+    // {
+    //     cw[arr[i]] = a;
+    // }
 
 }
 
+/// @brief initializes the fileops class
+/// @param n the name of the file to open
 fileops::fileops(string n) {
     f_name = n;
 }
 
+/// @brief opens the given file for operations
+/// @param n name of the file
 void fileops::open(string n)
 {
     f_name = n;
 }
 
+/// @brief counts number of lines in the opened file
+/// @return number of lines
 int fileops::get_num_lines(void) {
     int t = 0;
     string str = "";
@@ -52,6 +61,8 @@ int fileops::get_num_lines(void) {
     return t;
 }
 
+/// @brief picks a random word from the opened file
+/// @return the random word
 string fileops::get_rd_word(void) {
 
     srand(time(NULL));
@@ -112,25 +123,36 @@ void hangman::Hang_mod(int n) {
 
 }
 
+/// @brief initializes the game , opens the given file and loads a random word
+/// @param str name of file
 hangman::hangman(string str) {
     f.open(str);
     word = f.get_rd_word();
     // cout << word << endl;
 }
-
+/// @brief Game loop 
 void hangman::play(void) {
     char c;
-
-    string cw = "-------";
+    //current word on screen user is filling
+    string cw = "";
+    for (int i = 0; i < word.length(); i++)
+    {
+        cw += "-";
+    }
+    //list of guessed letters
     string gw = "";
+    //incorrect guesses
     string ig = "";
+    //set initial state of hangman
     Hang_mod(1);
+    //Heart emoji asci = 
     char heart = 3;
-    cout << "Word Length : " << "7\n";
+    cout << "Word Length : " << word.length()<<endl;
     while (true)
     {
         if (lives == 0) { break; }
         if (cw == word) { break; }
+
         cout << "Current Word : " << cw << endl;
         // cout << "Guessed words : " << gw << endl;
         cout << "Incorrect guesses : " << ig << endl;
@@ -140,16 +162,20 @@ void hangman::play(void) {
             cout << heart;
         }
         cout << endl;
+
         cout << "Guess a character \n";
         cin >> c;
+        //check if c is already guessed
         if (check(c, gw)) {
             system("cls");
             cout << "Already guessed!!!\n";
             Hang_mod(8 - lives);
             continue;
         }
+        //add c to guessed words
         gw += c;
-        gw += " ";
+        // gw += " ";
+        //clear screen
         system("cls");
         cout << "you guessed " << c << "\n";
         // cout << "comparing " << c << " " << word[index] << endl;
@@ -165,6 +191,7 @@ void hangman::play(void) {
         // cout << "kdkjf\n";
         Hang_mod((8 - lives));
     }
+    //Check if player is out of lives
     if (lives == 0) {
         cout << "      \n\n GAME OVER!!" << endl;
         cout << "Correct word was : " << word << endl;

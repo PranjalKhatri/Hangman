@@ -6,6 +6,7 @@
 #include<time.h>
 #include<fstream>
 #include<windows.h>
+#include <vector>
 #include<conio.h>
 
 using namespace std;
@@ -17,7 +18,7 @@ void fill_char(char a, string s, string& wc);
 class fileops {
     string f_name;
 public:
-    fileops() {}
+    fileops() = default;
     fileops(string n);
     void open(string n);
     int get_num_lines(void);
